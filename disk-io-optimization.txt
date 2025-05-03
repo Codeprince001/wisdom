@@ -1,0 +1,21 @@
+
+  --------------------------- Modification Method ----------------------------
+
+---------------- Adjusting the Dirty Data Refresh Policy to Reduce the Drive I/O Pressure ------------------
+  1. Adjusting dirty data refresh policy:  duration for storing dirty data in the cache: # echo 2000 > /proc/sys/vm/dirty_expire_centisecs
+  2. dirty background ratio: max % of total memory that can be dirty before writing starts:  echo 8 > /proc/sys/vm/dirty_background_ratio
+  3. dirty expire centrisecs: age which dirty data is old and eligible for write-back: sysctl -w vm.dirty_ratio=20
+
+  ------------------------- Adjusting the Drive File Read-Ahead Parameter -----------------------
+    # echo 4096 > /sys/block/$DEVICE-NAME /queue/read_ahead_kb
+
+    ----------------------- Optimizing the Drive I/O Scheduling Mode --------------------------
+    * Check the current scheduling mode: cat /sys/block/$DEVICE-NAME/queue/scheduler
+    * change the value,run the echo command. For example, to change sda to deadline, run the following command: echo deadline/bfq/kyber/cfq > /sys/block/sda/queue/scheduler
+
+      ------------------ Optimizing File System Parameters ---------------------
+   * If sda is mounted to the /home/disk0 directory, the default fstab entry is as follows:  mount -o nobarrier -o remount /home/disk0
+  * Using the XFS File System with Better Performance: 
+     i. # mkfs.xfs /dev/sda1
+     ii. # mkfs.xfs /dev/sda1 -b size=8192
+     
