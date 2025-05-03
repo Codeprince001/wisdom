@@ -1,0 +1,99 @@
+-------------- installing java ------------------
+  1. dnf install -y java*
+  2. obtain the source code and save in /usr/lib/jvm/
+  vim /etc/profile:
+    export JAVA_HOME=/usr/lib/jvm/bisheng-jdk
+    export PATH=$JAVA_HOME/bin:$PATH
+
+------------------------------------------------- jstat  ---------------------------------------------------
+
+is a performance monitoring tool bundled with the Java Development Kit (JDK). It provides real-time information about JVM performance,
+       including heap memory usage, garbage collection (GC) activity, class loading, and just-in-time (JIT) compilation.
+
+* Basic Command Format: jstat [option] <pid>
+
+| Command                         | Description                                            |
+| ------------------------------- | ------------------------------------------------------ |
+| `jstat -class <pid>`            | Shows loaded class count and memory usage for classes. |
+| `jstat -compiler <pid>`         | Displays JIT compilation statistics.                   |
+| `jstat -gc <pid>`               | Provides detailed garbage collection information.      |
+| `jstat -gccapacity <pid>`       | Displays capacity of generations in the heap.          |
+| `jstat -gcutil <pid>`           | Shows GC utilization as percentages.                   |
+| `jstat -gcnew <pid>`            | Stats for the young generation area.                   |
+| `jstat -gcnewcapacity <pid>`    | Capacity details for the young generation.             |
+| `jstat -gcold <pid>`            | Stats for the old generation area.                     |
+| `jstat -gcpermcapacity <pid>`   | Details for the permanent generation space.            |
+| `jstat -printcompilation <pid>` | Shows compilation activity of methods.                 |
+
+
+| Parameter | Description                                |
+| --------- | ------------------------------------------ |
+| `S0C`     | Survivor space 0 capacity (bytes)          |
+| `S1C`     | Survivor space 1 capacity (bytes)          |
+| `S0U`     | Used space in survivor space 0 (bytes)     |
+| `S1U`     | Used space in survivor space 1 (bytes)     |
+| `EC`      | Eden space capacity (bytes)                |
+| `EU`      | Used space in Eden (bytes)                 |
+| `OC`      | Old generation capacity (bytes)            |
+| `OU`      | Used space in old generation (bytes)       |
+| `PC`      | Permanent generation capacity (bytes)      |
+| `PU`      | Used space in permanent generation (bytes) |
+| `YGC`     | Number of young GCs since JVM start        |
+| `YGCT`    | Time spent on young GCs (seconds)          |
+| `FGC`     | Number of full GCs since JVM start         |
+| `FGCT`    | Time spent on full GCs (seconds)           |
+| `GCT`     | Total time spent on all GCs (seconds)      |
+
+
+
+  ---------------------------- JMAP --------------------------------------
+
+  jstat:  provides real-time monitoring of various JVM performance metrics such as Garbage Collection (GC), class loading, heap usage, and compiler activity.
+
+  usage: jstat [option] <pid>
+
+  | Command                         | Description                              |
+| ------------------------------- | ---------------------------------------- |
+| `jstat -class <pid>`            | Number and memory size of loaded classes |
+| `jstat -compiler <pid>`         | Real-time compilation stats              |
+| `jstat -gc <pid>`               | GC stats including counts and timings    |
+| `jstat -gccapacity <pid>`       | Heap memory pool capacity                |
+| `jstat -gcutil <pid>`           | GC usage percentages                     |
+| `jstat -gcnew <pid>`            | Young generation stats                   |
+| `jstat -gcnewcapacity <pid>`    | Young gen capacity info                  |
+| `jstat -gcold <pid>`            | Old generation stats                     |
+| `jstat -gcpermcapacity <pid>`   | Perm gen memory usage                    |
+| `jstat -printcompilation <pid>` | Current JIT compilation info             |
+
+  ------------ 📋 Sample Output Columns for -gc: ---------------
+
+  | Param   | Description                  |
+| ------- | ---------------------------- |
+| S0C/S1C | Survivor spaces capacity     |
+| S0U/S1U | Used space in survivor areas |
+| EC/EU   | Eden space capacity/used     |
+| OC/OU   | Old generation capacity/used |
+| PC/PU   | Perm gen capacity/used       |
+| YGC     | Young GC count               |
+| YGCT    | Time spent in Young GC       |
+| FGC     | Full GC count                |
+| FGCT    | Time spent in Full GC        |
+| GCT     | Total GC time                |
+
+
+  ------------------------------- JMAP --------------------------------
+jmap helps inspect heap memory, dump heap data to file, and analyze object statistics — crucial for debugging memory leaks and understanding heap structure.
+
+  | Command                                        | Description                                  |
+| ---------------------------------------------- | -------------------------------------------- |
+| `jmap -heap <pid>`                             | Heap summary: size, GC config, and usage     |
+| `jmap -histo[:live] <pid>`                     | Histogram of object instances and memory     |
+| `jmap -finalizerinfo <pid>`                    | Lists objects awaiting finalization          |
+| `jmap -permstat <pid>`                         | Classloader and perm gen info                |
+| `jmap -dump:[live,]format=b,file=<path> <pid>` | Dumps heap to `.hprof` for external analysis |
+
+  -------------------- What Is the JVM Heap? ------------------------
+When your Java program runs, it uses memory provided by the Java Virtual Machine (JVM). This memory is split into different sections:
+
+
+  
