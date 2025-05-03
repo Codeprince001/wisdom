@@ -30,3 +30,9 @@ v. Enabling TSO
   # ethtool -K $eth tso on
 vi. Enabling LRO
   # ethtool -k $eth
+vii. Selecting tuned Configurations
+    # yum install tuned
+    * tuned-adm recommend
+    * tuned-adm active
+    * tuned-adm profile throughput-performance
+    * tuned-adm list
