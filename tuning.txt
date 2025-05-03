@@ -1,0 +1,24 @@
+----------------- CPU AND MEMORY TUNING ------------
+
+Tools:
+1. top
+  top -p $PID
+  top -p $PID -H
+
+
+2. perf: search for and analyze hotspot functions.
+* installation: yum -y install perf
+* perf top command to search for hotspot functions
+  i. perf sched record command is used to record the process calling information in a period of time
+    usage: perf sched record -p $PID
+  ii. perf sched latency command is used to parse the perf.data file in the current directory. -s indicates sorting, and max indicates sorting based on the maximum delay.
+    usage: perf sched latency -s max
+
+3.  numactl: The numactl tool can be used to view the NUMA node configuration and status of the current server. 
+* installation: yum -y install numactl numastat
+  i. Run the numactl command to view the NUMA configuration of the current server.
+    usage: numactl -H
+  ii. Run the numactl command to bind the process to a specified CPU core
+    usage: numactl -C 0-15 $process
+  iii. Run the numastat command to check the memory access hit ratio of the current NUMA node
+    usage: numastat
