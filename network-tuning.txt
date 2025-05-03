@@ -1,0 +1,32 @@
+ethtool
+    usage: # yum -y install ethtool net-tools
+    -k : Check the NIC offload information.
+    -K Modify the NIC offload information.
+    -c Check the NIC aggregation information.
+    -C Modify the NIC aggregation information.
+    -l Set the number of NIC queues.
+    -L Set the number of NIC queues
+
+strace
+  installation: strace is a program debugging tool in the Linux environment. It is used to trace the system call of applications.
+  usage: yum -y install strace
+  usage: strace -p <pid>
+
+
+
+-------------- Optimization Method ------------------------
+1. Network NUMA Core Binding
+  Modification Method
+i. Stop irqbalance.
+  # systemctl stop irqbalance.service
+  # systemctl disable irqbalance.service
+ii. Set the number of NIC queues to the number of CPU cores.
+  # ethtool -L ethx combined 48
+iii. Query the interrupt IDs.
+  # cat /proc/interrupts | grep $eth | awk -F ':' '{print $1}'
+iv. Adjusting Interrupt Aggregation Parameters
+  # ethtool -C eth3 adaptive-rx off adaptive-tx off rx-usecs N rx-frames N tx-usecs N tx-frames N
+v. Enabling TSO
+  # ethtool -K $eth tso on
+vi. Enabling LRO
+  # ethtool -k $eth
