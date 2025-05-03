@@ -1,0 +1,18 @@
+FROM hub.oepkgs.net/openeuler/openeuler:22.09
+
+WORKDIR /home
+
+RUN yum -y install wget gcc make libgcc gcc-c++ glibc-devel tar --nogpgcheck && \
+    wget https://obs-mirror-ftp4.obs.cn-north-4.myhuaweicloud.com/database/redis-4.0.3-aarch64.tar.gz && \
+    tar -zxvf redis-4.0.3-aarch64.tar.gz && mv redis-4.0.3/ redis && rm -f redis-4.0.3-aarch64.tar.gz
+
+WORKDIR /home/redis
+
+RUN make && make install
+
+VOLUME /data
+
+EXPOSE 6379
+
+CMD ["redis-server"]
+
