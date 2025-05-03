@@ -46,7 +46,7 @@ is a performance monitoring tool bundled with the Java Development Kit (JDK). It
 
 
 
-  ---------------------------- JMAP --------------------------------------
+  ---------------------------- JSTAT --------------------------------------
 
   jstat:  provides real-time monitoring of various JVM performance metrics such as Garbage Collection (GC), class loading, heap usage, and compiler activity.
 
@@ -95,5 +95,33 @@ jmap helps inspect heap memory, dump heap data to file, and analyze object stati
   -------------------- What Is the JVM Heap? ------------------------
 When your Java program runs, it uses memory provided by the Java Virtual Machine (JVM). This memory is split into different sections:
 
+| Option                 | Meaning                                                                     |
+| ---------------------- | --------------------------------------------------------------------------- |
+| `-Xms<size>`           | Set **initial heap size** (start with this much memory).                    |
+| `-Xmx<size>`           | Set **maximum heap size** (never use more than this).                       |
+| `-Xmn<size>`           | Set **young generation size**.                                              |
+| `-Xss<size>`           | Set **stack size per thread** (useful if you have many threads).            |
+| `-XX:NewRatio=n`       | Ratio of young\:old generation. Example: `2` means 1/3 young, 2/3 old.      |
+| `-XX:SurvivorRatio=n`  | Ratio of Eden\:Survivor. Example: `8` → Eden 8 parts, each Survivor 1 part. |
+| `-XX:MaxPermSize=size` | Maximum size for the Permanent Generation (Java 7 and below).               |
 
   
+------------------------------------    Example Command Usage: --------------------------------
+
+
+| **GC Type**                     | **Description**                                                                 | **Collection Mode**           | **Generation**       | **Modification Parameter** | **How to Use**                                                                                                      |
+| ------------------------------- | ------------------------------------------------------------------------------- | ----------------------------- | -------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Serial**                      | Single-threaded serial collector for young generation                           | Serial collector              | Young generation     | `-XX:+UseSerialGC`         | Use this for small, single-threaded applications. Add `-XX:+UseSerialGC` when running the Java application.         |
+| **ParNew**                      | Multi-threaded parallel serial collector                                        | Parallel collector            | Young generation     | `-XX:+UseParNewGC`         | For multi-core CPUs, use `-XX:+UseParNewGC` to enable multi-threaded collection for young generation.               |
+| **Parallel Scavenge**           | Parallel throughput priority collector, aimed at minimizing pause times         | Parallel collector            | Young generation     | `-XX:+UseParallelGC`       | To prioritize throughput, use `-XX:+UseParallelGC`. Adjust GC pause time with `-XX:MaxGCPauseMillis`.               |
+| **Serial Old**                  | Single-threaded serial garbage collector for old generation                     | Serial collector              | Old generation       | `-XX:+UseSerialOldGC`      | Use for low-memory environments, where single-thread collection for the old generation is sufficient.               |
+| **CMS (Concurrent Mark Sweep)** | Collector optimized for minimizing collection pause duration                    | Concurrent collector          | Old generation       | `-XX:+UseConcMarkSweepGC`  | Ideal for low-latency systems. Use `-XX:+UseConcMarkSweepGC` to minimize pause time during garbage collection.      |
+| **Parallel Old**                | Multi-threaded parallel garbage collector for the old generation                | Parallel collector            | Old generation       | `-XX:+UseParallelOldGC`    | For multi-core CPUs, use `-XX:+UseParallelOldGC` to enable parallel collection for the old generation.              |
+| **G1**                          | Low-latency garbage collector, optimized for large heaps and multi-core systems | Concurrent/Parallel collector | Young/Old generation | `-XX:+UseG1GC`             | For large heaps or low-latency applications, use `-XX:+UseG1GC`. Adjust the pause time with `-XX:MaxGCPauseMillis`. |
+
+
+* Serial Collector: java -XX:+UseSerialGC -jar your_application.jar
+* ParNew Collector: java -XX:+UseParNewGC -jar your_application.jar
+* Parallel Scavenge Collector: java -XX:+UseParallelGC -jar your_application.jar
+* CMS Collector: java -XX:+UseConcMarkSweepGC -jar your_application.jar
+* G1 Garbage Collector: java -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -jar your_application.jar
