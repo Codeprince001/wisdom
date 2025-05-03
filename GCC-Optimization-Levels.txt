@@ -1,0 +1,22 @@
+| Flag     | Description                                                                                           |
+| -------- | ----------------------------------------------------------------------------------------------------- |
+| `-O0`    | **No optimization**. Fastest compilation, best for **debugging**. Default if no `-O` is given.        |
+| `-O1`    | Basic optimizations. Improves performance **without significantly increasing compilation time**.      |
+| `-O2`    | More aggressive optimizations, including inlining, loop unrolling, and dead code elimination.         |
+| `-O3`    | Even more aggressive. Includes everything in `-O2` plus **loop interchange**, **vectorization**, etc. |
+| `-Os`    | Optimize for **size**. Same as `-O2` but disables space-consuming optimizations.                      |
+| `-Oz`    | **Further reduces size** beyond `-Os` (supported by Clang; partially by GCC).                         |
+| `-Ofast` | Like `-O3` but **ignores strict standards compliance** (e.g., disables IEEE/strict aliasing rules).   |
+| `-Og`    | Optimize for **debugging**. Enables some optimizations that don't interfere with debug info.          |
+
+# No optimization (good for debugging)
+gcc -O0 main.c -o app_debug
+
+# Balanced optimization
+gcc -O2 -mtune=tsv110 -march=armv8-a main.c -o app_opt
+
+# Maximum performance (may break strict IEEE behavior)
+gcc -Ofast -mtune=tsv110 -march=armv8-a main.c -o app_fastest
+
+# Optimize for smallest binary size
+gcc -Os main.c -o app_small
