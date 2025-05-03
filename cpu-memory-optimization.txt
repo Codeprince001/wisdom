@@ -1,0 +1,13 @@
+1. Optimizing NUMA to Reduce Cross-NUMA Memory Access
+    numactl -C 28-31 ./test
+
+2. Adjusting the Memory Page Size
+  * cd /usr/src/kernels/kernels/xxxxxx.arch64
+  * dnf groupinstall -y "Development Tools"
+  * make menuconfig
+
+3. Set memory huge page.
+  echo 20 > /sys/devices/system/node/node0/hugepages/hugepages-2048kB/nr_hugepages
+
+4. Setting Transparent Huge Page
+   echo never > /sys/kernel/mm/transparent_hugepage/enabled
