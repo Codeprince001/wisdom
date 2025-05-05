@@ -1,0 +1,24 @@
+--------------Authorization and Authentication – GRUB2 Encryption Password-----------
+* grub2-mkpasswd-pbkdf2: openEuler#12
+* Use the vi tool to open grub.cfg and add the following fields to the beginning of the file:
+
+-----------Restrict accounts that are allowed to use su commands.---------------
+Steps:
+Edit the PAM configuration for su
+Open /etc/pam.d/su:
+
+vi /etc/pam.d/su
+Enable wheel group restriction
+Ensure this line is uncommented (remove # if present):
+
+auth required pam_wheel.so use_uid
+Add authorized users to the wheel group
+Only users in this group can use su to switch to root:
+
+usermod -aG wheel username
+
+------------------Setting Password Complexity----------
+/etc/securit/pwquality.conf
+
+------ Setting a Password Validity Period -------------
+Modify the /etc/login.defs
