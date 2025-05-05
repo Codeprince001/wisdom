@@ -1,0 +1,45 @@
+----------------------- installing Tomcat --------------------------
+1. unzip the package
+2. sh /usr/local/src/apache/tomcat-X-X/bin/startup.sh
+3. add 8080 to security group
+4. copy primtetest.war to /usr/local/apache/tomcat-X-X/webapps
+
+-------------- performing stress test -------------------------
+1. unzip apache-jmeter /usr/local/src/
+2. vim /etc/profile
+    export PATH=$PATH:/usr/local/src/apache-jmeter/bin
+3. cd /usr/local/src/apache-jmetet/extra
+4. jmeter -n -t Test.jmx -l test01.jtl
+5. set ip address to that of the EIP of the apache-tomcat: jmeter -n -t Test.jmx -l test01.jtl
+
+
+
+-------------------------- TUNING SQLite3 Data Insertion -------------------------------
+1. denf insall -y sqlite-devel
+2. python3 demo.py
+
+3. python3 demo2.py
+
+---------------------- TRIGGERING SWAP PROGRAM ----------------------------
+# Create a swap file.
+fallocate -l 2G /mnt/swapfile
+
+# Modify the permission so that only the root user can access the file.
+chmod 600 /mnt/swapfile
+
+# Configure the swap file.
+mkswap /mnt/swapfile
+
+# Enable swap.
+swapon /mnt/swapfile
+
+
+** chmod 777 swap_fle.c
+** gcc -c swap_file.c -o swap.out
+nohup taskset -c 0 ./test_swap >> swap.out 2>&1 &
+
+------------------------------ TUNNING JAVA DEADLOCKS --------------------------------------
+1. ensure java is configured
+2. javac Deadlock.java
+3. java Deadloack
+
