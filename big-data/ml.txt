@@ -1,1 +1,63 @@
+-------------- Compilation Process -----------------
+The compilation for the machine learning algorithm library consists of three steps: environment setup, code obtaining, and code compilation.
+1. Install JDK and Maven to prepare the environment.
+2. Obtain the adaptation code of the machine learning algorithm library.
+3. Compile the adaption code.
+
+
+-----------jdk -----------------
+** wget https://mirror.iscas.ac.cn/kunpeng/archive/compiler/bisheng_jdk/bisheng-jdk-8u342-linux-aarch64.tar.gz
+** tar -zxf bisheng-jdk-8u342-linux-aarch64.tar.gz -C /usr/local
+** export JAVA_HOME=/usr/local/bisheng-jdk1.8.0_342
+** export PATH=$JAVA_HOME/bin:${PATH}
+
+------------ maven ---------------------------------------------------------
+** wget https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+** tar -zxf apache-maven-3.6.3-bin.tar.gz
+** mv apache-maven-3.6.3 /opt/tools/installed/
+** export MAVEN_HOME=/opt/tools/installed/apache-maven-3.6.3
+** export PATH=$MAVEN_HOME/bin:$PATH
+** vi /opt/tools/installed/apache-maven-3.6.3/conf/settings.xml
+----------------------------------------------------------------------------------------------------------------------------
+  <mirrors>
+      <id>mirrors.huaweicloud.com</id>
+      <url>https://mirrors.huaweicloud.com/kunpeng/maven</url>
+      <name>mirrors huaweicloud com</name>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </mirrors>
+  <mirrors>
+      <id>repository.huaweicloud.com</id>
+      <url>https://mirrors.huaweicloud.com/repository/maven</url>
+      <name>repository huaweicloud com</name>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+   </mirrors>
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+-------------gcc----------------------------------------------------------------
+** cd /opt/tools/installed/
+** wget https://ftp.gnu.org/gnu/gcc/gcc-7.3.0/gcc-7.3.0.tar.gz
+** cd gcc-7.3.0
+** yum install -y bzip2
+** ./contrib/download_prerequisites
+** wget http://gcc.gnu.org/pub/gcc/infrastructure/gmp-6.1.0.tar.bz2 
+wget http://gcc.gnu.org/pub/gcc/infrastructure/mpfr-3.1.4.tar.bz2 
+wget http://gcc.gnu.org/pub/gcc/infrastructure/mpc-1.0.3.tar.gz 
+wget http://gcc.gnu.org/pub/gcc/infrastructure/isl-0.16.1.tar.bz2
+
+After the manual download is complete, run the script again.
+./contrib/download_prerequisites
+./configure --enable-languages=c,c++ --disable-multilib --with-system-zlib --prefix=/usr/local/gcc7.3.0
+make -j15
+make install
+vi /etc/profile
+export LD_LIBRARY_PATH=/usr/local/gcc7.3.0/lib64:${LD_LIBRARY_PATH}
+export CC=/usr/local/gcc7.3.0/bin/gcc
+export CXX=/usr/local/gcc7.3.0/bin/g++
+source /etc/profile
+gcc -v
 
