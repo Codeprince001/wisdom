@@ -1,0 +1,12 @@
+download link: https://kunpeng-repo.obs.cn-north-4.myhuaweicloud.com/Kunpeng%20BoostKit/Kunpeng%20BoostKit%2025.0.RC1/BoostKit-ksl_2.5.0.zip
+
+CFLAGS=-g3 -W -Wall -O0 -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -march=armv8.2-a -fsigned-char
+else
+CFLAGS=-W -Wall -O4 -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -march=armv8.2-a -fsigned-char
+endif
+INSTALLDIR=/usr/local/bin
+GLIBS=-I /usr/local/ksl/include/ -L /usr/local/ksl/lib/ -lavx2ki -lm -lpthread
+
+rpm -ivh bosotkit-ksl
+
+source /etc.profile
