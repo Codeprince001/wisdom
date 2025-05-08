@@ -1,0 +1,25 @@
+* bigtop https://ci.bigtop.apache.org/view/Releases/job/Bigtop-3.2.1-aarch64/DISTRO=centos-7,PLATFORM=aarch64-slave,PRODUCT=bigtop-utils/
+
+dnf install zookeeper: dnf install -y zookeep*
+------------------- Start ZooKeeper-----------------
+  cd /usr/lib/zookeeper/bin/
+  ./zkServer.sh start
+
+intall bigtop:
+1. create the repo: bigtop.repo
+[bigtop]
+name=Bigtop
+enabled=1
+gpgcheck=1
+baseurl=http://repos.bigtop.apache.org/releases/3.3.0/openeuler/22.03/$basearch
+gpgkey=https://dist.apache.org/repos/dist/release/bigtop/KEYS
+
+2. dnf install -y bigtop*
+
+3. If ZooKeeper is installed in DNF or RPM mode, the default directory is /opt. You need to copy the following two JAR packages from /opt/zookeeper/lib to the libs directory of Kafka so that Kafka can be started properly:
+zookeeper-3.6.2.jar
+  * cp /opt/zookeeper/lib/zookeeper* /usr/lib/kafka/libs/
+
+4. Start Kafka.
+cd /usr/lib/kafka/bin
+./kafka-server-start.sh ../config/server.properties
