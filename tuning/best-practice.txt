@@ -1,0 +1,18 @@
+Sample 1: Matrix Analysis
+chmod 777 multiply.c multiply_simd.c multiply_start.sh multiplysimd_start.sh
+------------ Detection of the Hotspot Function multiply for One-Dimensional Matrix Calculation
+1. Prepare the multiply program: Compile multiply.c and grant the read, write, and execute permissions to all users.
+* gcc -g multiply.c -o multiply && chmod 777 multiply
+
+2. Bind the multiply.c program to a CPU core and use the background startup script multiply_start.sh to start the program. 
+* nohup bash multiply_start.sh >>multiply.out 2>&1 &
+
+Sample 2: Detecting and Tuning Column-wise Access Loops
+* chmod 777 cache_hit.c cache_miss.c
+* gcc -g cache_miss.c -o cache_miss && chmod 777 cache_miss
+* nohup bash miss_start.sh >>cache_miss.out 2>&1 &
+
+Sample 3: Frequent Lock Preemption
+* chmod 777 pthread_mutex.c pthread_atomic.c
+* gcc -g pthread_mutex.c -o pthread_mutex -lpthread && chmod 777 pthread_mutex
+* nohup taskset -c 0-1 ./pthread_mutex >>pthread_mutex.out 2>&1 &
