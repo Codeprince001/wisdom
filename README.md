@@ -1,2 +1,1 @@
-https://www.kernel.org/doc/Documentation/sysctl/vm.txt
-
+https://github.com/kunpengcompute/devkitdemo.git
