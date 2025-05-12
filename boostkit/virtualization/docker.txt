@@ -1,0 +1,58 @@
+-------------- INSTALLATION DEPLOYMENT AND OPTIMIZATION OF QEMU, OPENSTACK, KUBERNETES AND DOCKER ------------------
+-------Docker----------
+1. tar zxf docker-19.03.10.tgz
+2. ```cp docker/* /usr/bin```
+3. vim /usr/lib/systemd/system/docker.service
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target firewalld.service
+Wants=network-online.target
+[Service]
+Type=notify
+ExecStart=/usr/bin/dockerd
+ExecReload=/bin/kill -s HUP $MAINPID
+LimitNOFILE=infinity
+LimitNPROC=infinity
+TimeoutStartSec=0
+Delegate=yes
+KillMode=process
+Restart=on-failure
+StartLimitBurst=3
+StartLimitInterval=60s
+[Install]
+WantedBy=multi-user.target
+
+4. systemctl start docker
+5. docker version
+
+6. -------- common docker command ---------
+  | **Command**                                                                                                                             | **Description**                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `docker run --network host`                                                                                                             | Enables the container and the host to share the network.                                                  |
+| `docker pull ubuntu:17.10`                                                                                                              | Pulls the Ubuntu 17.10 image from Docker Hub.                                                             |
+| `docker run -p 15555-15579:15555-15579`                                                                                                 | Maps a range of ports (host\:guest).                                                                      |
+| `docker port <container>`                                                                                                               | Displays the configuration of mapped ports.                                                               |
+| `docker inspect <container>`                                                                                                            | Displays detailed information about a container.                                                          |
+| `docker info`                                                                                                                           | Displays overall Docker environment information.                                                          |
+| `docker ps (-a)`                                                                                                                        | Lists running containers (`-a` includes stopped containers).                                              |
+| `docker images`                                                                                                                         | Lists all available container images.                                                                     |
+| `docker run -v /root/data/:/home/data/`                                                                                                 | Maps the `/root/data` directory on the host to `/home/data` in the container for data sharing.            |
+| `docker commit 812a997f614a ubuntu:update`                                                                                              | Saves the modified container as a new image named `ubuntu:update`.                                        |
+| `docker export cbe3cb7799ed > update.tar`                                                                                               | Exports the filesystem of a container as a tar archive.                                                   |
+| `docker import - update < update.tar`                                                                                                   | Imports a container image from a tar archive.                                                             |
+| `docker save <image-id> > ubuntu_17.10.tar`                                                                                             | Saves an image as a local tar file.                                                                       |
+| `docker load < ubuntu_17.10.tar`                                                                                                        | Loads an image from a local tar file to Docker.                                                           |
+| `docker tag <image-id> Ubuntu:17.10`                                                                                                    | Tags an existing image with a new name.                                                                   |
+| `docker cp <HOST_PATH> <CONTAINER-NAME>:/<PATH>`                                                                                        | Copies files from the host to the specified container path.                                               |
+| `docker run -it -d -p 5900:5900 -p 15555-15577:15555-15577 --name mesa0 --privileged -v /root/share:/root/share ubuntu:17.10 /bin/bash` | Starts a Docker container with interactive terminal, detached mode, port mappings, volume, and privilege. |
+
+
+----------------------  Creating a Docker Image for the Kunpeng Architecture ------------------------
+  1. docker run -itd -p 5000:80 --name custom-name --privileged centos:latest init
+  ******** docker run -itd --name openeuler --privileged --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro openeuler/openeuler:latest /bin/bash ********
+  2. docker exec -it custom-name /bin/bash
+    
+----------- Docker Tuning --------------------
+  1.NIC Interrupt Affinity
+  * 
