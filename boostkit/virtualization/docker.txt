@@ -51,8 +51,11 @@ WantedBy=multi-user.target
 ----------------------  Creating a Docker Image for the Kunpeng Architecture ------------------------
   1. docker run -itd -p 5000:80 --name custom-name --privileged centos:latest init
   ******** docker run -itd --name openeuler --privileged --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro openeuler/openeuler:latest /bin/bash ********
-  2. docker exec -it custom-name /bin/bash
+
+------------------- tunning ----------------------
+1. Numa affinity: Bind each container vCPU to a CPU and assign memory in the same NUMA node to each vCPU.
+The Kunpeng 920 5250 processor is used as an example. Create a container named 4u8g_01, bind CPUs 4 to 7 of NUMA 0 to the container, allocate 8 GB memory, use the centos:latest image, mount a local volume, and map /home on the local host to /home on the container.
+  * docker run -d -it --cpus=4 --cpuset-cpus=4-7 --cpuset-mems=0 -m 8192m --name 4u8g_01 -v /home:/home centos:latest
+
+2. docker exec -it custom-name /bin/bash
     
------------ Docker Tuning --------------------
-  1.NIC Interrupt Affinity
-  * 
