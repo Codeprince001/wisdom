@@ -1,0 +1,33 @@
+-------------- Installing QEMU -------------------
+1. Obtain the QEMU installation package.
+2. Modify the environment variable: export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig
+
+------------------------- package installations -----------------------
+4. pip3 install tomli, pip3 install sphinx sphinx_rtd_theme, sudo yum install ninja-build -y, sudo yum install pixman pixman-devel -y, sudo yum install liburing liburing-devel -y
+, sudo yum install libnfs libnfs-devel -y, sudo yum install libseccomp libseccomp-devel -y, sudo yum install libxkbcommon libxkbcommon-devel -y, sudo yum install spice-protocol -y
+------------------------------------------------------------------------
+Install SPICE server and protocol
+sudo yum install spice-server spice-server-devel spice-protocol -y
+
+# Install slirp for user-mode networking
+sudo yum install libslirp libslirp-devel -y
+
+sudo yum groupinstall "Development Tools" -y
+----------------- Install SPICE-related Dependencies -------------------
+sudo yum install spice-server spice-server-devel spice-protocol -y
+sudo yum install alsa-lib alsa-lib-devel libpulse libpulse-devel -y
+sudo yum install libvdeplug libvdeplug-devel -y
+sudo yum install libslirp libslirp-devel -y
+
+sudo yum install gnutls gnutls-devel -y
+
+
+
+
+
+
+5. 
+3. Configure, compile, and install QEMU.
+    ./configure --prefix=/usr/local/qemu --enable-debug --enable-vnc --enable-kvm  --enable-spice  --enable-gnutls
+    make && make install
+4. 
