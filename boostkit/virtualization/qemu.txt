@@ -1,9 +1,14 @@
--------------- Installing QEMU -------------------
+---------------------------------------------------- Installing QEMU ----------------------------------------------------
 1. Obtain the QEMU installation package.
 2. Modify the environment variable: export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig
 
 ------------------------- package installations -----------------------
-4. pip3 install tomli, pip3 install sphinx sphinx_rtd_theme, sudo yum install ninja-build -y, sudo yum install pixman pixman-devel -y, sudo yum install liburing liburing-devel -y
+4. pip3 install tomli, pip3 install sphinx sphinx_rtd_theme, sudo yum install ninja-build -y, sudo yum install pixman pixman-devel -y, sudo yum install liburing liburing-devel -y,
+
+* rados missing: sudo dnf install librados-devel -y
+
+* --enable-rbd: sudo dnf install librbd-devel -y
+
 , sudo yum install libnfs libnfs-devel -y, sudo yum install libseccomp libseccomp-devel -y, sudo yum install libxkbcommon libxkbcommon-devel -y, sudo yum install spice-protocol -y
 ------------------------------------------------------------------------
 Install SPICE server and protocol
@@ -21,13 +26,53 @@ sudo yum install libslirp libslirp-devel -y
 
 sudo yum install gnutls gnutls-devel -y
 
-
-
-
-
-
-5. 
-3. Configure, compile, and install QEMU.
-    ./configure --prefix=/usr/local/qemu --enable-debug --enable-vnc --enable-kvm  --enable-spice  --enable-gnutls
+Configure, compile, and install QEMU.
+   ./configure --target-list=aarch64-softmmu --enable-kvm --enable-rbd  --prefix=/usr
     make && make install
-4. 
+
+
+
+--------------------------------- Installing virt-install ---------------------
+1. Create soft links.
+* ln -s /usr/bin/qemu-system-aarch64 /usr/bin/qemu-kvm
+* ln -s /usr/bin/qemu-system-aarch64 /usr/libexec/qemu-kvm
+
+2. Install libvirt.
+yum -y install libvirt
+systemctl start libvirtd
+
+3. Install virt-install. Add an external mirror source.
+
+vi /etc/yum.repos.d/local.repo
+Add the following content to the file:
+
+[arch_fedora_online]
+name=arch_fedora 
+baseurl=https://mirrors.huaweicloud.com/fedora/development/rawhide/Everything/aarch64/os
+enabled=1
+gpgcheck=0
+
+4. yum -y install virt-install
+
+--------------------------------------- Verifying QEMU -----------------------------------
+1. mkdir -p /home/kvm/images
+chown root:root /home/kvm/images
+chmod 755 /home/kvm/images
+
+2. virsh pool-define-as StoragePool --type dir --target /home/kvm/images
+virsh pool-build StoragePool
+virsh pool-start StoragePool
+virsh pool-autostart StoragePool
+
+3. virsh pool-info StoragePool
+virsh pool-list
+
+4. Create the drive space for the VM.
+virsh vol-create-as --pool StoragePool --name 1.img --capacity 50G --allocation 1G --format qcow2
+
+5. virt-install --name=vm1 --vcpus=4 --ram=8192 --disk path=/home/kvm/images/1.img,format=qcow2,size=50,bus=virtio --location /home/openEuler-22.03-LTS-SP3-aarch64-dvd.iso --network network=default --nographics
+
+------------Creating a VM Using an Existing QCOW2 Image --------------
+1. cd /home/kvm/images/
+xz -d openEuler-22.03-LTS-SP3-aarch64.qcow2.xz
+2. virt-install --name=vm2 --vcpus=4 --ram=8192  --disk path=/home/kvm/images/openEuler-22.03-LTS-SP3-aarch64.qcow2,format=qcow2,size=40,bus=virtio --boot hd --network network=default --force --autostart
