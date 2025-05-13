@@ -1,0 +1,91 @@
+--------------- Installing Open Stack -----------------------
+1. Set the host name of each node.
+Controller node: hostnamectl set-hostname controller
+Compute node:hostnamectl set-hostname compute
+
+* Modify the /etc/hosts file on all nodes based on the network requirements
+vi /etc/hosts
+192.168.14.2 controller
+192.168.14.4 compute
+
+2. Configure the Yum source on all nodes and enable the EPOL software repository to support OpenStack.
+* Open the Yum configuration file.
+vi /etc/yum.conf
+Add the following content to the end of the file: sslverify=false
+Install and enable the Yum source for OpenStack Train.
+yum -y install openstack-release-train.noarch
+yum clean all && yum makecache
+
+3. Configuring Password-Free Login
+1. ssh-keygen -t rsa
+2. ssh-copy-id controller
+ssh-copy-id compute
+
+4. Installing the SQL Database
+* yum install mariadb mariadb-server python3-PyMySQL python3-pyparsing
+* vi /etc/my.cnf.d/openstack.cnf
+  [mysqld] 
+  bind-address = 192.168.14.2 ------- 192.168.14.2 is the controller node IP address of the current node in the environment. You can replace it as required.
+  default-storage-engine = innodb 
+  innodb_file_per_table = on 
+  max_connections = 4096 
+  collation-server = utf8_general_ci 
+  character-set-server = utf8
+
+5. systemctl enable mariadb.service 
+systemctl start mariadb.service
+
+6. Installing RabbitMQ
+yum install rabbitmq-server
+systemctl enable rabbitmq-server.service
+systemctl start rabbitmq-server.service
+
+* Add an OpenStack user.
+rabbitmqctl add_user openstack RABBIT_PASSWORD
+
+* Set the permission of the OpenStack user so that the user can perform configuration, write, and read operations.
+rabbitmqctl set_permissions openstack ".*" ".*" ".*"
+
+* Modify the default RabbitMQ parameter.
+Open the /usr/lib/systemd/system/rabbitmq-server.service file.
+vi /usr/lib/systemd/system/rabbitmq-server.service
+Press i to enter the insert mode and add the following content to the Service module:
+[Service] 
+LimitNOFILE=16384
+
+* Restart the RabbitMQ service.
+systemctl daemon-reload  
+systemctl restart rabbitmq-server.service
+
+7. Installing Memcached
+  yum install memcached python3-memcached
+* Modify the /etc/sysconfig/memcached file: vi /etc/sysconfig/memcached 
+
+8. Configuring NTP
+Configure NTP to synchronize the time between compute and controller nodes.
+* Install the chrony component on all nodes.
+yum install -y chrony
+* Set the same time zone for all nodes. For example, set the time zone to Asia.
+> timedatectl set-timezone Asia/Shanghai
+> Set the controller node as the NTP server node.
+* Open the /etc/chrony.conf file.
+vi /etc/chrony.conf
+Press i to enter the insert mode and add the following content:
+allow controller_subnet_ip/21 
+local stratum 10
+
+9. Configure the compute and storage nodes as NTP clients.
+Open the /etc/chrony.conf file.
+vi /etc/chrony.conf : Press i to enter the insert mode and comment out the following line:
+pool pool.ntp.org iburst
+Add the following content:  server controller iburst
+
+* Start the NTP service.
+  systemctl enable chronyd.service 
+  systemctl start chronyd.service 
+  systemctl status chronyd.service
+* Start NTP synchronization on all nodes.
+  timedatectl set-ntp no
+  timedatectl set-ntp yes
+* Verify time synchronization.
+  chronyc sources
