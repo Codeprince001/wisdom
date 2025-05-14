@@ -89,3 +89,5 @@ Add the following content:  server controller iburst
   timedatectl set-ntp yes
 * Verify time synchronization.
   chronyc sources
+
+10. 
