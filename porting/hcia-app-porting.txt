@@ -1,0 +1,15 @@
+--------------------- Porting a Python application----------------------
+
+  ------------- installing numpy -----------------
+  mkdir ~/.pip
+  vim ~/.pip/pip.conf
+
+[global]
+index-url = https://mirrors.huaweicloud.com/repository/pypi/simple
+trusted-host = mirrors.huaweicloud.com
+timeout = 120
+
+yum install -y gcc-gfortran
+unzip souce code
+pip3 install Cython
+pip3 setup.py install
