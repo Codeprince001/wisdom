@@ -1,0 +1,43 @@
+--------------------- Porting a Python application----------------------
+
+  ------------- installing numpy -----------------
+  mkdir ~/.pip
+  vim ~/.pip/pip.conf
+
+[global]
+index-url = https://mirrors.huaweicloud.com/repository/pypi/simple
+trusted-host = mirrors.huaweicloud.com
+timeout = 120
+
+yum install -y gcc-gfortran
+unzip souce code
+pip3 install Cython
+pip3 setup.py install
+
+--------------- porting isula --------------------
+yum -y install iSulad
+cp /etc/isulad/daemon.json /etc/isulad/daemon.json.origin
+vim /etc/isulad/daemon.json
+  "registry-mirrors": [
+          "hub.oepkgs.net"
+]
+
+yum -y install jq
+cat /etc/isulad/daemon.json jq
+systemctl start isulad
+systemnctl enable isulad
+
+isula create -it openeuler/openeuler:20.09
+isula ps -a
+isulad run openeuler/openeuler:20.09 cat /etc/os-release
+
+yum --enable-repo update install -y isula-build
+systemmctl start isula-build
+systemctl status isula-build
+
+-------------- Porting a container --------------
+yum install -y docker-runc
+mkdir test-isula-build && cd test-isulad-build
+vim Dockerfil
+
+
