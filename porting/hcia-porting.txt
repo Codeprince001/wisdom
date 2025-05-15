@@ -58,3 +58,12 @@ EXPOSE 6379
 
 CMD ["redis-server"]
 
+* isula-build ctr-img build -f Dockerfile -o isulad:redis-isula-build:v0.1 .
+isula-build ctr-img images
+isula images
+isula run -it redis-isula-build:v0.1
+
+
+isula ps -a
+
+isula exec -it 986298763876 redis-cli
