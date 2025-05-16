@@ -1,0 +1,36 @@
+Set the installation directory
+1. Create a BiSheng compiler installation directory, for example, /opt/compiler.
+mkdir -p /opt/compiler
+2. Copy the BiSheng compiler package to the installation directory.
+
+cp BiShengCompiler-4.2.0-aarch64-linux.tar.gz /opt/compiler
+Decompress the package.
+cd /opt/compiler
+tar -zxvf BiShengCompiler-4.2.0-aarch64-linux.tar.gz
+
+chmod -R 755 ${PATH_TO_BISHENG}/BiShengCompiler-x.x.x-aarch64-linux
+
+-------------- Configure the environment variables for BiSheng compiler- ----------------
+export PATH=/opt/compiler/BiShengCompiler-4.2.0-aarch64-linux/bin:$PATH 
+export LD_LIBRARY_PATH=/opt/compiler/BiShengCompiler-4.2.0-aarch64-linux/lib:/opt/compiler/BiShengCompiler-4.2.0-aarch64-linux/lib/aarch64-unknown-linux-gnu:$LD_LIBRARY_PATH
+
+
+hash -r
+
+clang -v
+
+
+Installation by Using the Yum Repository
+Add a repository in the AArch environment.
+The openEuler repository website may be updated. You can visit oepkgs to obtain the latest repository website.
+
+dnf config-manager --add-repo https://repo.oepkgs.net/openeuler/rpm/openEuler-20.03-LTS-SP1/extras/aarch64/
+Update the repository index.
+dnf update
+
+Install the BiShengCompiler software package.
+dnf install BiShengCompiler-4.2.0
+
+hash -r
+
+clang -v
