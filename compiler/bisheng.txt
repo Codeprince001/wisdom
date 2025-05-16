@@ -4,7 +4,7 @@ mkdir -p /opt/compiler
 2. Copy the BiSheng compiler package to the installation directory.
 
 cp BiShengCompiler-4.2.0-aarch64-linux.tar.gz /opt/compiler
-Decompress the package.
+
 cd /opt/compiler
 tar -zxvf BiShengCompiler-4.2.0-aarch64-linux.tar.gz
 
@@ -34,3 +34,20 @@ dnf install BiShengCompiler-4.2.0
 hash -r
 
 clang -v
+
+-------------------------------- using bisheng ----------------------------
+
+***** Compiling and Running the C and C++ Programs
+1. clang  [command line flags]  hello.c  -o  hello.o 
+  ./hello.o
+
+clang++  [command line flags]  hello.cpp  -o  hello.o 
+./hello.o
+
+2. Compiling and Running the Fortran Program
+  flang  [command line flags]  hello.f90  -o  hello.o 
+  ./hello.o
+
+clang  [command line flags]  -fuse-ld=lld  hello.c  -o  hello.o 
+./hello.o
+
