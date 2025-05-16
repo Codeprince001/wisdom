@@ -10,3 +10,5 @@ devkit-sample: https://www.hikunpeng.com/doc_center/source/en/kunpengdevps/hando
 
 perf-tuning: https://www.hikunpeng.com/doc_center/source/en/perftuning/tuningtip/Top%2010%20Tips%20for%20Performance%20Tuning.pdf
   * line 741
+
+bisheng compiler: https://www.hikunpeng.com/doc_center/source/en/kunpengdevps/compiler/ug-bisheng/BiSheng%20Compiler%204.2.0%20User%20Guide.pdf
